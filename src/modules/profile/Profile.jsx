@@ -22,6 +22,21 @@ const Profile = () => {
     }
   };
 
+  const deletePost = async (id) => {
+    try {
+      const response = await requestManager.apiDeleteWithToken(
+        `/post/deletePost/${id}`
+      );
+      if (response?.data) {
+        toast.success("post deleted successfully");
+
+        getAllPosts();
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message ?? "something went wrong");
+    }
+  };
+
   useEffect(() => {
     getAllPosts();
   }, []);
@@ -101,7 +116,11 @@ const Profile = () => {
           </Button>
         </Box>
       </Box>
-      {allPosts?.length ? allPosts.map((post) => <Post post={post} />) : null}
+      {allPosts?.length
+        ? allPosts.map((post) => (
+            <Post post={post} allowDelete deletePost={deletePost} />
+          ))
+        : null}
     </Box>
   );
 };

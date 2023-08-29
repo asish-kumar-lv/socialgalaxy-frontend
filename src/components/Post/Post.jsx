@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import {
   ChatBubbleOutline,
+  Delete,
+  DeleteOutline,
   Favorite,
   FavoriteBorder,
 } from "@mui/icons-material";
@@ -19,7 +21,8 @@ import { UserContext } from "../../context/UserContext";
 import * as requestManager from "../../utils/requestManager";
 import { toast } from "react-hot-toast";
 
-const Post = ({ post }) => {
+const Post = (props) => {
+  const { post, allowDelete, deletePost } = props;
   const [showComments, setShowComments] = useState(false);
   const [commentsData, setCommentsData] = useState([]);
   const { currentUser, setOpenLoginPrompt } = useContext(UserContext);
@@ -104,6 +107,16 @@ const Post = ({ post }) => {
             })}
           </Typography>
         </Box>
+        {allowDelete ? (
+          <IconButton
+            sx={{ marginLeft: "auto" }}
+            onClick={() => {
+              if (deletePost) deletePost(post?._id);
+            }}
+          >
+            <DeleteOutline sx={{ color: "black" }} />
+          </IconButton>
+        ) : null}
       </Stack>
       <Box mt={2} ml={1}>
         <Typography
