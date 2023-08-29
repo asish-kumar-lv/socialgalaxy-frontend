@@ -10,6 +10,7 @@ import * as requestManager from "../../utils/requestManager";
 
 const Login = (props) => {
   const navigate = useNavigate();
+  const { dialog } = props;
   const { checkLogin, setOpenLoginPrompt, openLoginPrompt } =
     useContext(UserContext);
   const url1 =
@@ -128,12 +129,18 @@ const Login = (props) => {
               )}
               <Box width="100%" mt={2}>
                 <Typography color="black" textAlign="left" fontSize="0.8rem">
-                  Forgot Password? <Link to="/reset">Reset</Link>
+                  Forgot Password?{" "}
+                  <Link to="/reset" reloadDocument={dialog}>
+                    Reset
+                  </Link>
                 </Typography>
               </Box>
               <Box width={"100%"}>
                 <Typography fontSize="0.8rem">
-                  Not an Account? <Link to="/register">Register</Link>
+                  Not an Account?{" "}
+                  <Link to="/register" reloadDocument={dialog}>
+                    Register
+                  </Link>
                 </Typography>
                 <Button
                   disableRipple

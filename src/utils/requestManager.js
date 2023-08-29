@@ -44,4 +44,18 @@ function apiPutWithToken(url, body) {
   });
 }
 
-export { apiGet, apiGetWithToken, apiPost, apiPostWithToken, apiPutWithToken };
+function apiDeleteWithToken(url) {
+  const finalUrl = process.env.REACT_APP_BASE_API_PATH + url;
+  return axios.delete(finalUrl, {
+    headers: getHeadersWithToken(),
+  });
+}
+
+export {
+  apiGet,
+  apiGetWithToken,
+  apiPost,
+  apiPostWithToken,
+  apiPutWithToken,
+  apiDeleteWithToken,
+};
