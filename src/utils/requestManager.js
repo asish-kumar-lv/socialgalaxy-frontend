@@ -37,7 +37,7 @@ function apiPostWithToken(url, body) {
   });
 }
 
-function apiPutWithToken(url, body) {
+function apiPutWithToken(url, body = {}) {
   const finalUrl = process.env.REACT_APP_BASE_API_PATH + url;
   return axios.put(finalUrl, body, {
     headers: getHeadersWithToken(),

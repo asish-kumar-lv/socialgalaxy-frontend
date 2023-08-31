@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import ErrorComponent from "../../components/InputField/ErrorComponent";
+import Md from "../../components/LayoutContainers/Md";
 import { UserContext } from "../../context/UserContext";
 import * as requestManager from "../../utils/requestManager";
 
@@ -64,107 +65,109 @@ const Login = (props) => {
     setSubmitting(false);
   };
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        mt: 5,
-        p: "5rem 3rem",
-        background: "white",
-        color: "black",
-        borderRadius: "4px",
-        backgroundImage: url2,
-      }}
-    >
-      <Typography
-        fontSize="1.5rem"
-        fontWeight={600}
-        textAlign="center"
-        mb={5}
-        color="#282c34"
+    <Md>
+      <Container
+        maxWidth="sm"
+        sx={{
+          mt: 5,
+          p: "5rem 3rem",
+          background: "white",
+          color: "black",
+          borderRadius: "4px",
+          backgroundImage: url2,
+        }}
       >
-        Social Star Login
-      </Typography>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-        }) => {
-          return (
-            <form onSubmit={handleSubmit}>
-              <TextField
-                placeholder="abc@def.com"
-                label="E-Mail"
-                fullWidth
-                sx={inputStyle}
-                name="email"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-              />
-              {errors && touched.email && errors.email && (
-                <ErrorComponent>{errors.email} </ErrorComponent>
-              )}
-              <TextField
-                placeholder="********"
-                label="Password"
-                fullWidth
-                sx={inputStyle}
-                name="password"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                type="password"
-              />
-              {errors && touched.password && errors.password && (
-                <ErrorComponent>{errors.password} </ErrorComponent>
-              )}
-              <Box width="100%" mt={2}>
-                <Typography color="black" textAlign="left" fontSize="0.8rem">
-                  Forgot Password?{" "}
-                  <Link to="/reset" reloadDocument={dialog}>
-                    Reset
-                  </Link>
-                </Typography>
-              </Box>
-              <Box width={"100%"}>
-                <Typography fontSize="0.8rem">
-                  Not an Account?{" "}
-                  <Link to="/register" reloadDocument={dialog}>
-                    Register
-                  </Link>
-                </Typography>
-                <Button
-                  disableRipple
-                  sx={{
-                    marginLeft: "auto",
-                    display: "block",
-                    color: "#282c34",
-                    borderColor: "#282c34",
-                    ":hover": {
+        <Typography
+          fontSize="1.5rem"
+          fontWeight={600}
+          textAlign="center"
+          mb={5}
+          color="#282c34"
+        >
+          Social Star Login
+        </Typography>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+          }) => {
+            return (
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  placeholder="abc@def.com"
+                  label="E-Mail"
+                  fullWidth
+                  sx={inputStyle}
+                  name="email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                />
+                {errors && touched.email && errors.email && (
+                  <ErrorComponent>{errors.email} </ErrorComponent>
+                )}
+                <TextField
+                  placeholder="********"
+                  label="Password"
+                  fullWidth
+                  sx={inputStyle}
+                  name="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  type="password"
+                />
+                {errors && touched.password && errors.password && (
+                  <ErrorComponent>{errors.password} </ErrorComponent>
+                )}
+                <Box width="100%" mt={2}>
+                  <Typography color="black" textAlign="left" fontSize="0.8rem">
+                    Forgot Password?{" "}
+                    <Link to="/reset" reloadDocument={dialog}>
+                      Reset
+                    </Link>
+                  </Typography>
+                </Box>
+                <Box width={"100%"}>
+                  <Typography fontSize="0.8rem">
+                    Not an Account?{" "}
+                    <Link to="/register" reloadDocument={dialog}>
+                      Register
+                    </Link>
+                  </Typography>
+                  <Button
+                    disableRipple
+                    sx={{
+                      marginLeft: "auto",
+                      display: "block",
                       color: "#282c34",
                       borderColor: "#282c34",
-                    },
-                  }}
-                  variant="outlined"
-                  type="submit"
-                >
-                  Login
-                </Button>
-              </Box>
-            </form>
-          );
-        }}
-      </Formik>
-    </Container>
+                      ":hover": {
+                        color: "#282c34",
+                        borderColor: "#282c34",
+                      },
+                    }}
+                    variant="outlined"
+                    type="submit"
+                  >
+                    Login
+                  </Button>
+                </Box>
+              </form>
+            );
+          }}
+        </Formik>
+      </Container>
+    </Md>
   );
 };
 

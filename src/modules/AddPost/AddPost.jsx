@@ -20,7 +20,7 @@ const AddPost = () => {
   };
 
   return (
-    <Box position="fixed" bottom="8%" right="10%">
+    <Box position="fixed" bottom="8%" left="10%">
       <Tooltip title="Add Post">
         <IconButton
           onClick={handleAddPostClick}

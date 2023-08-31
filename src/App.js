@@ -17,14 +17,9 @@ function App() {
           <PostContextProvider>
             <Header />
 
-            <Container
-              maxWidth="md"
-              sx={{ paddingTop: "5rem", paddingBottom: "2rem" }}
-            >
-              <AppRoutes />
-              <AddPost />
-              <AskLoginPrompt />
-            </Container>
+            <AppRoutes />
+            <AddPost />
+            <AskLoginPrompt />
           </PostContextProvider>
         </UserContextProvider>
       </BrowserRouter>
