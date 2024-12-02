@@ -54,10 +54,15 @@ const AllPosts = () => {
   }, [currentUser]);
 
   return (
-    <Grid container columnSpacing={2} sx={{ paddingTop: "5rem" }}>
+    <Grid
+      container
+      columnSpacing={2}
+      sx={{ paddingTop: "5rem" }}
+      justifyContent="center"
+    >
       <Grid item xs={0} lg={2.5}></Grid>
 
-      <Grid item xs={currentUser ? 9 : 12} lg={7}>
+      <Grid item xs={12} lg={7}>
         {loading ? (
           <Loader />
         ) : (
@@ -85,13 +90,14 @@ const AllPosts = () => {
         )}
       </Grid>
 
-      <Grid item xs={3} lg={2.5} alignItems="end" position="relative">
+      <Grid item xs={12} lg={2.5} alignItems="end" position="relative">
         <Box
           width="min-content"
-          position="fixed"
-          overflow="scroll"
+          position={{ xs: "relative", lg: "fixed" }}
+          overflow={{ xs: "auto", lg: "scroll" }}
           marginBottom="3rem"
-          sx={{ height: "calc(100% - 5rem)" }}
+          margin="auto"
+          sx={{ height: { xs: "auto", lg: "calc(100% - 5rem)" } }}
         >
           {allFriends?.length ? (
             <>
