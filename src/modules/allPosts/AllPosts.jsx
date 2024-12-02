@@ -55,9 +55,9 @@ const AllPosts = () => {
 
   return (
     <Grid container columnSpacing={2} sx={{ paddingTop: "5rem" }}>
-      <Grid item xs={2.5}></Grid>
+      <Grid item xs={0} lg={2.5}></Grid>
 
-      <Grid item xs={7}>
+      <Grid item xs={currentUser ? 9 : 12} lg={7}>
         {loading ? (
           <Loader />
         ) : (
@@ -85,7 +85,7 @@ const AllPosts = () => {
         )}
       </Grid>
 
-      <Grid item xs={2.5} alignItems="end" position="relative">
+      <Grid item xs={3} lg={2.5} alignItems="end" position="relative">
         <Box
           width="min-content"
           position="fixed"
@@ -100,13 +100,6 @@ const AllPosts = () => {
                   Join Community
                 </Typography>
               </Box>
-              {allFriends.map((user) => (
-                <UserCard
-                  user={user}
-                  key={user?._id}
-                  reload={getSuggestedFriends}
-                />
-              ))}
               {allFriends.map((user) => (
                 <UserCard
                   user={user}
