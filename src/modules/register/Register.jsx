@@ -1,4 +1,11 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  FormLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Formik } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -38,8 +45,18 @@ const Register = () => {
 
   const handleRegister = async (values) => {
     try {
-      const response = await requestManager.apiPost("/user/register", values);
-      console.log(response.data);
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("password_confirm", values.password_confirm);
+      formData.append("occupation", values.occupation);
+      formData.append("profileImage", values.profileImage);
+      const response = await requestManager.apiPostFormData(
+        "/user/register",
+        values
+      );
+
       if (response.status === 200) {
         toast.success("registered successfully");
         navigate("/login");
@@ -97,7 +114,9 @@ const Register = () => {
             handleBlur,
             handleSubmit,
             isSubmitting,
+            setFieldValue,
           }) => {
+            console.log(values);
             return (
               <form onSubmit={handleSubmit}>
                 <TextField
@@ -172,6 +191,22 @@ const Register = () => {
                 {errors && touched.occupation && errors.occupation && (
                   <ErrorComponent>{errors.occupation}</ErrorComponent>
                 )}
+
+                <Box sx={{ mt: 1 }}>
+                  <FormLabel>Upload Profile Image</FormLabel>
+                  <TextField
+                    fullWidth
+                    // sx={inputStyle}
+
+                    name="profileImage"
+                    fileName={values.profileImage?.name ?? ""}
+                    onChange={(e) =>
+                      setFieldValue("profileImage", e.target.files[0])
+                    }
+                    onBlur={handleBlur}
+                    type="file"
+                  />
+                </Box>
 
                 <Box width={"100%"}>
                   <Typography fontSize="0.8rem">

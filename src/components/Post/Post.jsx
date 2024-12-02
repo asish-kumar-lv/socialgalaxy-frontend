@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import {
   Avatar,
+  Badge,
   Box,
   IconButton,
   Paper,
@@ -22,7 +23,7 @@ import * as requestManager from "../../utils/requestManager";
 import { toast } from "react-hot-toast";
 
 const Post = (props) => {
-  const { post, allowDelete, deletePost } = props;
+  const { post, allowDelete, deletePost, reload } = props;
   const [showComments, setShowComments] = useState(false);
   const [commentsData, setCommentsData] = useState([]);
   const { currentUser, setOpenLoginPrompt } = useContext(UserContext);
@@ -53,18 +54,20 @@ const Post = (props) => {
     }
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (currentUser) {
-      reactPost();
+      await reactPost();
       setLike(true);
+      reload && (await reload());
     } else {
       setOpenLoginPrompt(true);
     }
   };
-  const handleDisLike = () => {
+  const handleDisLike = async () => {
     if (currentUser) {
-      reactPost();
+      await reactPost();
       setLike(false);
+      reload && (await reload());
     } else {
       setOpenLoginPrompt(true);
     }
@@ -92,7 +95,12 @@ const Post = (props) => {
         <IconButton sx={{ p: 0 }}>
           <Avatar
             alt="Remy Sharp"
-            src="https://images.pexels.com/photos/4009626/pexels-photo-4009626.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src={
+              post?.user?.profileImage
+                ? process.env.REACT_APP_BASE_FILE_PATH +
+                  post?.user?.profileImage
+                : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=1380&t=st=1692808875~exp=1692809475~hmac=25e58aa7a3d6d7ce4b57dd4f525ff67aa54cb1bcff9532b5dd2fcb7b25de63c9"
+            }
           />
         </IconButton>
         <Box>
@@ -132,7 +140,9 @@ const Post = (props) => {
       {showComments ? (
         <>
           {commentsData?.length
-            ? commentsData?.map((comment) => <Comment comment={comment} />)
+            ? commentsData?.map((comment) => (
+                <Comment key={comment?._id} comment={comment} />
+              ))
             : null}
           <AddComment
             showComments={showComments}
@@ -153,18 +163,39 @@ const Post = (props) => {
         }}
       >
         <Stack direction="row" alignItems={"center"} gap={2}>
-          {like ? (
-            <Favorite
-              sx={{ ml: 3, cursor: "pointer" }}
+          <>
+            {" "}
+            <Badge
+              badgeContent={post?.userLiked?.length}
+              slotProps={{
+                badge: {
+                  sx: {
+                    minHeight: "8px",
+                    height: "8px",
+                    width: "8px",
+                    minWidth: "8px",
+                    borderRadius: "50%",
+                    padding: "7px",
+                  },
+                },
+              }}
               color="secondary"
-              onClick={handleDisLike}
-            />
-          ) : (
-            <FavoriteBorder
-              sx={{ ml: 3, cursor: "pointer" }}
-              onClick={handleLike}
-            />
-          )}
+            >
+              {like ? (
+                <Favorite
+                  sx={{ ml: 3, cursor: "pointer" }}
+                  color="primary"
+                  onClick={handleDisLike}
+                />
+              ) : (
+                <FavoriteBorder
+                  sx={{ ml: 3, cursor: "pointer" }}
+                  onClick={handleLike}
+                />
+              )}
+            </Badge>
+          </>
+
           <Stack
             direction={"row"}
             onClick={handleCommentClick}

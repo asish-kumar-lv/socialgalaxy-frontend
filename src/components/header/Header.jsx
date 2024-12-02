@@ -26,6 +26,8 @@ function Header() {
     }
   };
   if (authLoading) return;
+
+  console.log(process.env.REACT_APP_BASE_FILE_PATH + currentUser?.profileImage);
   return (
     <AppBar
       position="fixed"
@@ -62,8 +64,9 @@ function Header() {
                 <Avatar
                   alt="Remy Sharp"
                   src={
-                    currentUser
-                      ? "https://images.pexels.com/photos/4009626/pexels-photo-4009626.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                    currentUser?.profileImage
+                      ? process.env.REACT_APP_BASE_FILE_PATH +
+                        currentUser?.profileImage
                       : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=1380&t=st=1692808875~exp=1692809475~hmac=25e58aa7a3d6d7ce4b57dd4f525ff67aa54cb1bcff9532b5dd2fcb7b25de63c9"
                   }
                 />

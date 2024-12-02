@@ -8,6 +8,8 @@ import Login from "./modules/login/Login";
 import Profile from "./modules/profile/Profile";
 import Register from "./modules/register/Register";
 import ResetPassword from "./modules/resetPassword/ResetPassword";
+import EditProfile from "./modules/profile/EditProfile";
+import ChangePassword from "./modules/changePassword/ChangePassword";
 
 const AppRoutes = () => {
   const { authLoading } = useContext(UserContext);
@@ -21,6 +23,24 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/edit-profile"
+        element={
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute>
+            <ChangePassword />
           </ProtectedRoute>
         }
       />

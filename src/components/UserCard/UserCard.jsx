@@ -17,18 +17,16 @@ import { toast } from "react-hot-toast";
 import * as requestManager from "../../utils/requestManager";
 
 const UserCard = (props) => {
-  const { user, profile } = props;
+  const { user, profile, request } = props;
 
   const handleRequest = async () => {
     try {
       const response = await requestManager.apiPutWithToken(
-        user?.isRequested
+        user?.isRequestSent
           ? `/user/requestFriendRollback/${user?._id}`
           : `/user/requestFriend/${user?._id}`
       );
 
-      console.log(response?.data);
-      console.log(response?.data);
       if (props?.reload) props?.reload();
     } catch (e) {
       toast.error(e.response.data.message);
@@ -38,11 +36,9 @@ const UserCard = (props) => {
   const acceptRequest = async () => {
     try {
       const response = await requestManager.apiPutWithToken(
-        `/user/acceptRequest/${user?.friendId}`
+        `/user/acceptRequest/${user?._id}`
       );
 
-      console.log(response?.data);
-      console.log(response?.data);
       if (props?.reload) props?.reload();
     } catch (e) {
       toast.error(e.response.data.message);
@@ -63,7 +59,11 @@ const UserCard = (props) => {
         <IconButton sx={{ p: 0 }}>
           <Avatar
             alt="Remy Sharp"
-            src="https://images.pexels.com/photos/4009626/pexels-photo-4009626.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src={
+              user?.profileImage
+                ? process.env.REACT_APP_BASE_FILE_PATH + user?.profileImage
+                : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=1380&t=st=1692808875~exp=1692809475~hmac=25e58aa7a3d6d7ce4b57dd4f525ff67aa54cb1bcff9532b5dd2fcb7b25de63c9"
+            }
           />
         </IconButton>
         <Box>
@@ -75,18 +75,23 @@ const UserCard = (props) => {
           </Typography>
         </Box>
         {profile ? (
-          <IconButton
-            sx={{ marginLeft: "auto", height: "min-height" }}
-            onClick={acceptRequest}
-          >
-            {!user?.isRequested && user?.isConfirmed ? null : (
-              <CheckCircle sx={{ color: "red", height: "min-height" }} />
-            )}
+          request ? (
+            <IconButton sx={{ marginLeft: "auto" }} onClick={acceptRequest}>
+              <CheckCircle sx={{ color: "red" }} />
+            </IconButton>
+          ) : null
+        ) : user?.isRequestReceived ? (
+          <IconButton sx={{ marginLeft: "auto" }} onClick={acceptRequest}>
+            <CheckCircle sx={{ color: "red" }} />
           </IconButton>
         ) : (
-          <IconButton sx={{ marginLeft: "auto" }} onClick={handleRequest}>
-            {user?.isRequested ? (
-              <PersonRemove sx={{ color: "black" }} />
+          <IconButton
+            sx={{ marginLeft: "auto" }}
+            disableRipple
+            onClick={handleRequest}
+          >
+            {user?.isRequestSent ? (
+              <PersonRemove sx={{ color: "grey" }} />
             ) : (
               <PersonAdd sx={{ color: "black" }} />
             )}

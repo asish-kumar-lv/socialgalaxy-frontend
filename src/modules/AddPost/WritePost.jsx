@@ -1,5 +1,5 @@
 import { Close } from "@mui/icons-material";
-import { Box, Button, IconButton, Input, Paper } from "@mui/material";
+import { Box, Button, IconButton, Input, Paper, Stack } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
 import { Formik } from "formik";
 import React, { useContext } from "react";
@@ -20,8 +20,8 @@ const WritePost = (props) => {
         "/post/addPost",
         values
       );
-      console.log(response?.data);
-      if (props?.reload) props?.reload();
+
+      if (props?.reload) await props?.reload();
     } catch (e) {
       toast.error(e.response.data.message);
     }
@@ -39,27 +39,7 @@ const WritePost = (props) => {
         ...springs,
       }}
     >
-      <Paper sx={{ p: 2, mt: 3, position: "relative" }}>
-        <IconButton
-          onClick={() => {
-            setShowAddPost(false);
-          }}
-          sx={{
-            position: "absolute",
-            right: 0,
-            top: 0,
-            transform: "translate(50%,-50%)",
-            background: "#d7d3df",
-            ":hover": {
-              background: "#d7d3df",
-            },
-            width: "25px",
-            height: "25px",
-          }}
-        >
-          <Close sx={{ color: "black", fontSize: "16px" }} />
-        </IconButton>
-
+      <Paper sx={{ p: 2, mt: 3 }}>
         <Formik
           initialValues={{
             content: "",
@@ -106,28 +86,47 @@ const WritePost = (props) => {
                   />
                 </Box>
 
-                <Button
-                  type="submit"
-                  sx={{
-                    marginLeft: "auto",
-                    display: "block",
-                    mt: 2,
-                    textTransform: "none",
-                  }}
-                  disabled={values?.content?.trim() === "" || isSubmitting}
+                <Stack
+                  direction="row"
+                  alignItems="end"
+                  justifyContent="end"
+                  mt={1}
                 >
-                  <Paper
+                  <Button onClick={() => setShowAddPost(false)}>
+                    <Paper
+                      sx={{
+                        p: "4px 30px",
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        background: "#fff",
+                        color: "#000",
+                      }}
+                    >
+                      Cancel
+                    </Paper>
+                  </Button>
+                  <Button
+                    type="submit"
                     sx={{
-                      p: "4px 30px",
-                      fontSize: "0.9rem",
-                      fontWeight: 600,
-                      background: "#282c34",
-                      color: "white",
+                      display: "block",
+                      mt: 2,
+                      textTransform: "none",
                     }}
+                    disabled={values?.content?.trim() === "" || isSubmitting}
                   >
-                    Post
-                  </Paper>
-                </Button>
+                    <Paper
+                      sx={{
+                        p: "4px 30px",
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        background: "#282c34",
+                        color: "white",
+                      }}
+                    >
+                      Post
+                    </Paper>
+                  </Button>
+                </Stack>
               </form>
             );
           }}

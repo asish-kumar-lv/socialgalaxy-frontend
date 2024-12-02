@@ -7,12 +7,14 @@ import Post from "../../components/Post/Post";
 import { UserContext } from "../../context/UserContext";
 import * as requestManager from "../../utils/requestManager";
 import UserCard from "../../components/UserCard/UserCard";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { logoutCurrentUser, currentUser } = useContext(UserContext);
 
   const [allPosts, setAllPosts] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
+  const [requests, setRequests] = useState([]);
 
   const getAllPosts = async (values) => {
     try {
@@ -28,8 +30,9 @@ const Profile = () => {
   const getUserFriends = async () => {
     try {
       const response = await requestManager.apiGetWithToken("/user/myFriends");
-      if (response?.data)
-        setAllFriends(response?.data?.data?.map((item) => item?.friend) ?? []);
+      if (response?.data) console.log(response?.data);
+      setAllFriends(response?.data?.friends ?? []);
+      setRequests(response?.data?.requests ?? []);
     } catch (e) {
       toast.error(e?.response?.data?.message ?? "something went wrong");
     }
@@ -61,8 +64,28 @@ const Profile = () => {
 
   return (
     <Lg>
-      <Grid container columnSpacing={2}>
-        <Grid item xs={2.5}></Grid>
+      <Grid container columnSpacing={2} sx={{ paddingTop: "5rem" }}>
+        <Grid item xs={2.5} mt={3}>
+          <Typography
+            color="white"
+            sx={{ textDecoration: "none" }}
+            component={Link}
+            to="/edit-profile"
+          >
+            {" "}
+            Edit Profile
+          </Typography>
+          <br />
+          <Typography
+            color="white"
+            sx={{ textDecoration: "none" }}
+            component={Link}
+            to="/change-password"
+          >
+            {" "}
+            Change Password
+          </Typography>
+        </Grid>
         <Grid item xs={7} sx={{ height: "100vh", overflow: "scroll" }}>
           <Box>
             <Box sx={{ borderRadius: "4px" }}>
@@ -95,7 +118,12 @@ const Profile = () => {
                     zIndex: 100,
                   }}
                   alt="Remy Sharp"
-                  src="https://images.pexels.com/photos/4009626/pexels-photo-4009626.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                  src={
+                    currentUser?.profileImage
+                      ? process.env.REACT_APP_BASE_FILE_PATH +
+                        currentUser?.profileImage
+                      : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=1380&t=st=1692808875~exp=1692809475~hmac=25e58aa7a3d6d7ce4b57dd4f525ff67aa54cb1bcff9532b5dd2fcb7b25de63c9"
+                  }
                 />
               </Box>
               <Box
@@ -151,30 +179,43 @@ const Profile = () => {
             </Box>
             {allPosts?.length
               ? allPosts.map((post) => (
-                  <Post post={post} allowDelete deletePost={deletePost} />
+                  <Post
+                    post={post}
+                    allowDelete
+                    deletePost={deletePost}
+                    reload={getAllPosts}
+                  />
                 ))
               : null}
           </Box>
         </Grid>
         <Grid item xs={2.5} alignItems="end">
           <Box width="min-content" marginLeft="auto">
-            {allFriends?.length ? (
-              <>
-                <Box mt={3} ml={1}>
-                  <Typography fontWeight={600} fontSize={"1.2rem"}>
-                    My Community
-                  </Typography>
-                </Box>
-                {allFriends.map((user) => (
-                  <UserCard
-                    user={user}
-                    key={user?._id}
-                    reload={getUserFriends}
-                    profile
-                  />
-                ))}
-              </>
-            ) : null}
+            <>
+              <Box mt={3} ml={1}>
+                <Typography fontWeight={600} fontSize={"1.2rem"}>
+                  My Community
+                </Typography>
+              </Box>
+              {requests.map((user) => (
+                <UserCard
+                  user={user}
+                  key={user?._id}
+                  reload={getUserFriends}
+                  profile
+                  request
+                />
+              ))}
+              {allFriends.map((user) => (
+                <UserCard
+                  user={user}
+                  key={user?._id}
+                  reload={getUserFriends}
+                  profile
+                  request={false}
+                />
+              ))}
+            </>
           </Box>
         </Grid>
       </Grid>
