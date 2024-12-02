@@ -22,7 +22,6 @@ const AllPosts = () => {
 
   const getAllPosts = async () => {
     try {
-      setLoading(true);
       const response = await requestManager.apiGetWithToken("/post/allPosts");
       if (response?.data) {
         setAllPosts(response?.data?.data ?? []);

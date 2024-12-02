@@ -56,8 +56,8 @@ const Post = (props) => {
 
   const handleLike = async () => {
     if (currentUser) {
-      await reactPost();
       setLike(true);
+      await reactPost();
       reload && (await reload());
     } else {
       setOpenLoginPrompt(true);
@@ -65,8 +65,8 @@ const Post = (props) => {
   };
   const handleDisLike = async () => {
     if (currentUser) {
-      await reactPost();
       setLike(false);
+      await reactPost();
       reload && (await reload());
     } else {
       setOpenLoginPrompt(true);
