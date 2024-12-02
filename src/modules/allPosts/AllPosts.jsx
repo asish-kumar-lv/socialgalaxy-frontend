@@ -10,6 +10,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import UserCard from "../../components/UserCard/UserCard";
 import AddPost from "../AddPost/AddPost";
 import Login from "../login/Login";
+import Loader from "../../components/Loader/Loader";
 
 const AllPosts = () => {
   const { showAddPost } = useContext(PostContext);
@@ -17,14 +18,18 @@ const AllPosts = () => {
 
   const [allPosts, setAllPosts] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getAllPosts = async () => {
     try {
+      setLoading(true);
       const response = await requestManager.apiGetWithToken("/post/allPosts");
       if (response?.data) {
         setAllPosts(response?.data?.data ?? []);
       }
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       toast.error(e?.response?.data?.message ?? "something went wrong");
     }
   };
@@ -53,27 +58,31 @@ const AllPosts = () => {
       <Grid item xs={2.5}></Grid>
 
       <Grid item xs={7}>
-        <Lg>
-          {showAddPost ? <WritePost reload={getAllPosts} /> : null}
-          {allPosts?.length ? (
-            allPosts.map((post) => (
-              <Post post={post} key={post?._id} reload={getAllPosts} />
-            ))
-          ) : currentUser ? (
-            <>
-              <Typography textAlign="center" mt={6}>
-                No Posts Yet
-              </Typography>
-            </>
-          ) : (
-            <>
-              <Typography textAlign="center" mt={2}>
-                No Posts Yet
-              </Typography>
-              <Login />
-            </>
-          )}
-        </Lg>
+        {loading ? (
+          <Loader />
+        ) : (
+          <Lg>
+            {showAddPost ? <WritePost reload={getAllPosts} /> : null}
+            {allPosts?.length ? (
+              allPosts.map((post) => (
+                <Post post={post} key={post?._id} reload={getAllPosts} />
+              ))
+            ) : currentUser ? (
+              <>
+                <Typography textAlign="center" mt={6}>
+                  No Posts Yet
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography textAlign="center" mt={2}>
+                  No Posts Yet
+                </Typography>
+                <Login />
+              </>
+            )}
+          </Lg>
+        )}
       </Grid>
 
       <Grid item xs={2.5} alignItems="end" position="relative">
